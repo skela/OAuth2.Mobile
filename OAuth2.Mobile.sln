@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuth2.Mobile", "src\OAuth2.Mobile\OAuth2.Mobile.csproj", "{DD5D3E7D-95F1-474E-9CF1-25B47ECBB6D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuth2.Mobile.Tests", "tests\OAuth2.Mobile.Tests\OAuth2.Mobile.Tests.csproj", "{C1A76F4E-E8A5-419C-B6CB-859DA7AD1506}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DD5D3E7D-95F1-474E-9CF1-25B47ECBB6D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD5D3E7D-95F1-474E-9CF1-25B47ECBB6D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD5D3E7D-95F1-474E-9CF1-25B47ECBB6D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD5D3E7D-95F1-474E-9CF1-25B47ECBB6D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1A76F4E-E8A5-419C-B6CB-859DA7AD1506}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1A76F4E-E8A5-419C-B6CB-859DA7AD1506}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1A76F4E-E8A5-419C-B6CB-859DA7AD1506}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1A76F4E-E8A5-419C-B6CB-859DA7AD1506}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
