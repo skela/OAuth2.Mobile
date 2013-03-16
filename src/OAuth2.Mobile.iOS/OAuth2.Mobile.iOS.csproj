@@ -46,18 +46,18 @@
     <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccessToken.cs" />
-    <Compile Include="SerializedAccessToken.cs" />
-    <Compile Include="OAuthServerConfiguration.cs" />
-    <Compile Include="Requests\ClientCredentialsGrantTokenRequest.cs" />
-    <Compile Include="Requests\TokenRequest.cs" />
-    <Compile Include="Requests\ResourceOwnerPasswordCredentialsGrantTokenRequest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Requests\RefreshAccessTokenRequest.cs" />
-    <Compile Include="RestClientExtensions.cs" />
-    <Compile Include="AccessTokenClient.cs" />
-    <Compile Include="AccessTokenStore.cs" />
+    <Compile Include="..\OAuth2.Mobile\AccessToken.cs" />
+    <Compile Include="..\OAuth2.Mobile\SerializedAccessToken.cs" />
+    <Compile Include="..\OAuth2.Mobile\OAuthServerConfiguration.cs" />
+    <Compile Include="..\OAuth2.Mobile\Requests\ClientCredentialsGrantTokenRequest.cs" />
+    <Compile Include="..\OAuth2.Mobile\Requests\TokenRequest.cs" />
+    <Compile Include="..\OAuth2.Mobile\Requests\ResourceOwnerPasswordCredentialsGrantTokenRequest.cs" />
+    <Compile Include="..\OAuth2.Mobile\Requests\RefreshAccessTokenRequest.cs" />
+    <Compile Include="..\OAuth2.Mobile\RestClientExtensions.cs" />
+    <Compile Include="..\OAuth2.Mobile\AccessTokenClient.cs" />
+    <Compile Include="..\OAuth2.Mobile\AccessTokenStore.cs" />
     <Compile Include="HttpException.cs" />
+    <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
