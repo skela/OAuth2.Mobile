@@ -23,14 +23,6 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AccessTokenStore"/> class.
         /// </summary>
-        public AccessTokenStore()
-            : this(AccountStore.Create())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AccessTokenStore"/> class.
-        /// </summary>
         /// <param name="accountStore">The account store.</param>
         /// <exception cref="System.ArgumentNullException">accountStore</exception>
         public AccessTokenStore(AccountStore accountStore)
