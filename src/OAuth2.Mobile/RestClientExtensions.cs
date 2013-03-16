@@ -26,13 +26,13 @@
                         {
                             taskCompletionSource.TrySetException(response.ErrorException);
                         }
-                        else if (response.StatusCode == HttpStatusCode.OK)
+                        else if (IsHttpException(response.StatusCode))
                         {
-                            taskCompletionSource.TrySetResult(response.Data);
+                            taskCompletionSource.TrySetException(new HttpException((int)response.StatusCode, response.StatusDescription));
                         }
                         else
                         {
-                            taskCompletionSource.TrySetException(new HttpException((int)response.StatusCode, response.StatusDescription));
+                            taskCompletionSource.TrySetResult(response.Data);
                         }
                     });
 
@@ -53,6 +53,11 @@
         public static Task ExecuteAsync(this IRestClient client, IRestRequest request, CancellationToken token)
         {
             return client.ExecuteAsync<IRestResponse>(request, token);
+        }
+
+        private static bool IsHttpException(HttpStatusCode httpStatusCode)
+        {
+            return (int)httpStatusCode >= 400;
         }
     }
 }

@@ -52,8 +52,7 @@
         {
             var restRequest = tokenRequest.ToRestRequest(this.serverConfiguration.TokensUrl);
 
-            return this.RestClient.ExecuteAsync<SerializedAccessToken>(restRequest, cancellationToken)
-                       .ContinueWith(t => t.Result.ToAccessToken(), TaskContinuationOptions.OnlyOnRanToCompletion);
+            return this.RestClient.ExecuteAsync<SerializedAccessToken>(restRequest, cancellationToken).ContinueWith(t => t.Result.ToAccessToken());
         }
     }
 }
