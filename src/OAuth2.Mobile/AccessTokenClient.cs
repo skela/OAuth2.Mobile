@@ -1,6 +1,5 @@
 ﻿namespace StudioDonder.OAuth2.Mobile
 {
-    using System;
     using System.Threading;
     using System.Threading.Tasks;
 

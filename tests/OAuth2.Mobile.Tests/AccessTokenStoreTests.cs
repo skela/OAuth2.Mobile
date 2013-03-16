@@ -24,6 +24,12 @@
         private const string RefreshToken = "xyzuio234pmnqwe";
         private const string ExpirationDate = "2013-03-25T02:00:12";
 
+        private const string TokenKey = "Token";
+        private const string ScopeKey = "Scope";
+        private const string RefreshTokenKey = "RefreshToken";
+        private const string TokenTypeKey = "TokenType";
+        private const string ExpirationDateKey = "ExpirationDate";
+
         [Fact]
         public void ConstructorWithNullAccountStoreThrowsArgumentNullException()
         {
@@ -428,9 +434,9 @@
         private static AccessToken CreateDifferentAccessToken()
         {
             var propertiesDictionary = CreatePropertiesDictionary();
-            propertiesDictionary["Token"] = "different token";
-            propertiesDictionary["RefreshToken"] = "different refresh token";
-            propertiesDictionary["Scope"] = "different scope";
+            propertiesDictionary[TokenKey] = "different token";
+            propertiesDictionary[RefreshTokenKey] = "different refresh token";
+            propertiesDictionary[ScopeKey] = "different scope";
 
             return new AccessToken(propertiesDictionary);
         }
@@ -439,11 +445,11 @@
         {
             return new Dictionary<string, string>
                        {
-                           { "Token", Token },
-                           { "RefreshToken", RefreshToken },
-                           { "Scope", Scope },
-                           { "TokenType", TokenType },
-                           { "ExpirationDate", ExpirationDate },
+                           { TokenKey, Token },
+                           { RefreshTokenKey, RefreshToken },
+                           { ScopeKey, Scope },
+                           { TokenTypeKey, TokenType },
+                           { ExpirationDateKey, ExpirationDate },
                        };
         }
     }
