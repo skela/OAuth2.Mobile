@@ -57,9 +57,10 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AccessToken"/> class.
+        /// Initializes a new instance of the <see cref="AccessToken" /> class.
         /// </summary>
         /// <param name="dictionary">The dictionary.</param>
+        /// <exception cref="System.ArgumentNullException">dictionary</exception>
         public AccessToken(IDictionary<string, string> dictionary)
         {
             Requires.NotNull(dictionary, "dictionary");
@@ -75,12 +76,51 @@
             this.ExpirationDate = dictionary.ContainsKey(ExpirationDateKey) ? DateTime.Parse(dictionary[ExpirationDateKey]) : (DateTime?)null;
         }
 
+        /// <summary>
+        /// Gets the token.
+        /// </summary>
+        /// <value>
+        /// The token.
+        /// </value>
         public string Token { get; private set; }
+
+        /// <summary>
+        /// Gets the scope.
+        /// </summary>
+        /// <value>
+        /// The scope.
+        /// </value>
         public string Scope { get; private set; }
+
+        /// <summary>
+        /// Gets the type of the token.
+        /// </summary>
+        /// <value>
+        /// The type of the token.
+        /// </value>
         public string TokenType { get; private set; }
+
+        /// <summary>
+        /// Gets the expiration date.
+        /// </summary>
+        /// <value>
+        /// The expiration date.
+        /// </value>
         public DateTime? ExpirationDate { get; private set; }
+
+        /// <summary>
+        /// Gets the refresh token.
+        /// </summary>
+        /// <value>
+        /// The refresh token.
+        /// </value>
         public string RefreshToken { get; private set; }
 
+        /// <summary>
+        /// Check if the access token should be refreshed when taking into account the specified refresh token expiration window.
+        /// </summary>
+        /// <param name="refreshTokenExpirationWindow">The refresh token expiration window.</param>
+        /// <returns><c>true</c>, if the access token should be refreshed; otherwise, <c>false</c>.</returns>
         public bool ShouldBeRefreshed(TimeSpan refreshTokenExpirationWindow)
         {
             if (this.ExpirationDate == null)
