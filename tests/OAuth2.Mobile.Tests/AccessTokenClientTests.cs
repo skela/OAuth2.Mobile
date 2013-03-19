@@ -8,15 +8,15 @@
 
     public class AccessTokenClientTests
     {
-        private const string ClientId = "TODO: fill in your client id";
-        private const string ClientSecret = "TODO: fill in your client secret";
-        private const string Username = "jstroud";
-        private const string Password = "xDIosd9j";
-        private const string ClientScope = "urn:x-oauth:entitlement:applications";
-        private const string UserScope = "urn:x-oauth:entitlement:applications";
+        private const string ClientId = "demo-identifier";
+        private const string ClientSecret = "demo-secret";
+        private const string Username = "demo-username";
+        private const string Password = "demo-password";
+        private const string ClientScope = "demo-scope-client";
+        private const string UserScope = "demo-scope-user";
 
-        private static readonly Uri TokensUrl = new Uri("/token.php", UriKind.Relative);
-        private static readonly Uri BaseUrl = new Uri("https://frko.surfnetlabs.nl/workshop/php-oauth");
+        private static readonly Uri TokensUrl = new Uri("/tokens", UriKind.Relative);
+        private static readonly Uri BaseUrl = new Uri("https://oauth2demo.azurewebsites.net");
 
         public AccessTokenClientTests()
         {
@@ -52,7 +52,7 @@
             // Act
 
             // Assert
-            Assert.Equal(ServerConfiguration.BaseUrl.ToString(), accessTokenClient.RestClient.BaseUrl);
+            Assert.Equal(ServerConfiguration.BaseUrl.OriginalString, accessTokenClient.RestClient.BaseUrl);
         }
 
         [Fact]
