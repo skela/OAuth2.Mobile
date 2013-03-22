@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StudioDonder.OAuth2.Mobile</RootNamespace>
-    <AssemblyName>StudioDonder.OAuth2.Mobile</AssemblyName>
+    <AssemblyName>OAuth2.Mobile</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
@@ -47,7 +47,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessToken.cs" />
-    <Compile Include="SerializedAccessToken.cs" />
+    <Compile Include="AccessTokenErrorResponse.cs" />
+    <Compile Include="AccessTokenResponse.cs" />
     <Compile Include="OAuthServerConfiguration.cs" />
     <Compile Include="Requests\ClientCredentialsGrantTokenRequest.cs" />
     <Compile Include="Requests\TokenRequest.cs" />

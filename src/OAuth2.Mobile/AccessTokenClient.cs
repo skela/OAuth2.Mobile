@@ -1,9 +1,12 @@
 ﻿namespace StudioDonder.OAuth2.Mobile
 {
+    using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Web;
 
     using RestSharp;
+    using RestSharp.Deserializers;
 
     using StudioDonder.OAuth2.Mobile.Requests;
 
@@ -15,6 +18,7 @@
     public class AccessTokenClient
     {
         private readonly OAuthServerConfiguration serverConfiguration;
+        private readonly JsonDeserializer jsonDeserializer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccessTokenClient"/> class.
@@ -26,6 +30,7 @@
             Requires.NotNull(serverConfiguration, "clientConfiguration");
 
             this.serverConfiguration = serverConfiguration;
+            this.jsonDeserializer = new JsonDeserializer();
             this.RestClient = new RestClient(serverConfiguration.BaseUrl.ToString());
         }
 
@@ -80,8 +85,24 @@
         private Task<AccessToken> ExecuteAccessTokenRequest(TokenRequest tokenRequest, CancellationToken cancellationToken)
         {
             var restRequest = tokenRequest.ToRestRequest(this.serverConfiguration.TokensUrl);
+            restRequest.OnBeforeDeserialization += response =>
+                {
+                    if ((int)response.StatusCode >= 400)
+                    {
+                        return;
+                    }
 
-            return this.RestClient.ExecuteAsync<SerializedAccessToken>(restRequest, cancellationToken).ContinueWith(t => t.Result.ToAccessToken());
+                    var accessTokenErrorResponse = this.jsonDeserializer.Deserialize<AccessTokenErrorResponse>(response);
+
+                    if (accessTokenErrorResponse.IsEmpty)
+                    {
+                        return;
+                    }
+
+                    throw new HttpException((int)HttpStatusCode.BadRequest, accessTokenErrorResponse.error_description);
+                };
+
+            return this.RestClient.ExecuteAsync<AccessTokenResponse>(restRequest, cancellationToken).ContinueWith(t => t.Result.ToAccessToken(), TaskContinuationOptions.OnlyOnRanToCompletion);
         }
     }
 }

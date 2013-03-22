@@ -4,7 +4,7 @@
 
     using Xunit;
 
-    public class SerializedAccessTokenTests
+    public class AccessTokenResponseTests
     {
         private const string TokenType = "bearer";
         private const string Scope = "test scope";
@@ -17,36 +17,36 @@
         public void ToAccessTokenWithNullAccessTokenThrowsInvalidOperationException()
         {
             // Arrange
-            var serializedAccessToken = CreateValidSerializedAccessToken();
+            var accessTokenResponse = CreateValidAccessTokenResponse();
 
             // Act
-            serializedAccessToken.access_token = null;
+            accessTokenResponse.access_token = null;
 
             // Assert
-            Assert.Throws<InvalidOperationException>(() => serializedAccessToken.ToAccessToken());
+            Assert.Throws<InvalidOperationException>(() => accessTokenResponse.ToAccessToken());
         }
 
         [Fact]
         public void ToAccessTokenWithNullTokenTypeThrowsInvalidOperationException()
         {
             // Arrange
-            var serializedAccessToken = CreateValidSerializedAccessToken();
+            var accessTokenResponse = CreateValidAccessTokenResponse();
 
             // Act
-            serializedAccessToken.token_type = null;
+            accessTokenResponse.token_type = null;
 
             // Assert
-            Assert.Throws<InvalidOperationException>(() => serializedAccessToken.ToAccessToken());
+            Assert.Throws<InvalidOperationException>(() => accessTokenResponse.ToAccessToken());
         }
 
         [Fact]
         public void ToAccessTokenReturnsCorrectAccessToken()
         {
             // Arrange
-            var serializedAccessToken = CreateValidSerializedAccessToken();
+            var accessTokenResponse = CreateValidAccessTokenResponse();
 
             // Act
-            var accessToken = serializedAccessToken.ToAccessToken();
+            var accessToken = accessTokenResponse.ToAccessToken();
 
             // Assert
             Assert.Equal(Token, accessToken.Token);
@@ -56,9 +56,9 @@
             Assert.True(DateTime.Now.Add(TimeSpan.FromSeconds(ExpiresIn)) - accessToken.ExpirationDate < TimeSpan.FromSeconds(DateTimeDifferenceInSecondsTolerance));
         }
 
-        private static SerializedAccessToken CreateValidSerializedAccessToken()
+        private static AccessTokenResponse CreateValidAccessTokenResponse()
         {
-            return new SerializedAccessToken
+            return new AccessTokenResponse
                        {
                            access_token = Token,
                            refresh_token = RefreshToken,

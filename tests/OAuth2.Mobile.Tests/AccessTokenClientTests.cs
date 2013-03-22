@@ -70,6 +70,19 @@
         }
 
         [Fact]
+        public void GetUserAccessTokenWithValidCredentialsButInvalidScopeThrowsException()
+        {
+            // Arrange
+            var accessTokenClient = new AccessTokenClient(ServerConfiguration);
+
+            // Act
+            var task = accessTokenClient.GetUserAccessToken(Username, Password, "invalid user scope", CancellationToken.None);
+            
+            // Assert
+            Assert.Throws<AggregateException>(() => task.Wait());
+        }
+
+        [Fact]
         public void GetUserAccessTokenWithNullUsernameThrowsArgumentNullException()
         {
             // Arrange
@@ -146,6 +159,19 @@
 
             // Assert
             Assert.NotNull(task.Result);
+        }
+
+        [Fact]
+        public void GetClientAccessTokenWithInvalidScopeReturnsAccessToken()
+        {
+            // Arrange
+            var accessTokenClient = new AccessTokenClient(ServerConfiguration);
+
+            // Act
+            var task = accessTokenClient.GetClientAccessToken("invalid client scope", CancellationToken.None);
+
+            // Assert
+            Assert.Throws<AggregateException>(() => task.Wait());
         }
 
         [Fact]

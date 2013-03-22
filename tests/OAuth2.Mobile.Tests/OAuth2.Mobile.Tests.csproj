@@ -60,7 +60,7 @@
     <Compile Include="Requests\RefreshAccessTokenRequestTests.cs" />
     <Compile Include="Requests\ResourceOwnerPasswordCredentialsGrantTokenRequestTests.cs" />
     <Compile Include="Requests\TokenRequestTests.cs" />
-    <Compile Include="SerializedAccessTokenTests.cs" />
+    <Compile Include="AccessTokenResponseTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

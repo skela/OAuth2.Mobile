@@ -8,7 +8,7 @@
     /// This class represents a serialized access token. We use this class to automatically deserialize the 
     /// result of an OAuth token response.
     /// </summary>
-    internal class SerializedAccessToken
+    internal class AccessTokenResponse
     {
         /// <summary>
         /// Gets or sets the access token.

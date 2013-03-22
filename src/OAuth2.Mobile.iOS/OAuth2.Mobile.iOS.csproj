@@ -47,7 +47,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\OAuth2.Mobile\AccessToken.cs" />
-    <Compile Include="..\OAuth2.Mobile\SerializedAccessToken.cs" />
+    <Compile Include="..\OAuth2.Mobile\AccessTokenErrorResponse.cs">
+      <Link>AccessTokenErrorResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\OAuth2.Mobile\AccessTokenResponse.cs">
+      <Link>AccessTokenResponse.cs</Link>
+    </Compile>
     <Compile Include="..\OAuth2.Mobile\OAuthServerConfiguration.cs" />
     <Compile Include="..\OAuth2.Mobile\Requests\ClientCredentialsGrantTokenRequest.cs" />
     <Compile Include="..\OAuth2.Mobile\Requests\TokenRequest.cs" />
