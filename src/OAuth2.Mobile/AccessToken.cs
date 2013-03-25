@@ -140,10 +140,10 @@
             var dictionary = new Dictionary<string, string>
                                  {
                                      { TokenKey, this.Token },
-                                     { RefreshTokenKey, this.RefreshToken },
-                                     { ScopeKey, this.Scope },
                                      { TokenTypeKey, this.TokenType },
-                                     { ExpirationDateKey, this.ExpirationDate.HasValue ? this.ExpirationDate.Value.ToString("s") : string.Empty },
+                                     { ScopeKey, this.Scope },
+                                     { ExpirationDateKey, this.ExpirationDate.HasValue ? this.ExpirationDate.Value.ToString("s") : null },
+                                     { RefreshTokenKey, this.RefreshToken }
                                  };
 
             return dictionary.Where(kv => kv.Value != null).ToDictionary(kv => kv.Key, kv => kv.Value);

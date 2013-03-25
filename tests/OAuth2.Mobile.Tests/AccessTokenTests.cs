@@ -283,6 +283,29 @@
             Assert.Equal(dictionary, accessToken.ToDictionary(), new StringKeyValuePairEqualityComparer());
         }
 
+        [Fact]
+        public void ToDictionaryDoesNotReturnNullValues()
+        {
+            // Arrange
+            var dictionary = CreateValidDictionary();
+            dictionary.Remove("RefreshToken");
+            dictionary.Remove("ExpirationDate");
+
+            // Act
+            var accessToken = new AccessToken(dictionary);
+            var accessTokenDictionary = accessToken.ToDictionary();
+
+            // Assert
+            var expectedDictionary = new Dictionary<string, string>
+                                  {
+                                      { "Token", accessToken.Token }, 
+                                      { "TokenType", accessToken.TokenType },
+                                      { "Scope", accessToken.Scope },
+                                  };
+
+            Assert.Equal(expectedDictionary, accessTokenDictionary, new StringKeyValuePairEqualityComparer());
+        }
+
         private static AccessToken CreateAccessToken(DateTime? expirationDate)
         {
             return new AccessToken(Token, TokenType, Scope, expirationDate);
@@ -293,10 +316,10 @@
             return new Dictionary<string, string>
                        {
                            { "Token", Token },
-                           { "RefreshToken", RefreshToken },
-                           { "Scope", Scope },
                            { "TokenType", TokenType },
+                           { "Scope", Scope },
                            { "ExpirationDate", ExpirationDate },
+                           { "RefreshToken", RefreshToken },
                        };
         }
     }
