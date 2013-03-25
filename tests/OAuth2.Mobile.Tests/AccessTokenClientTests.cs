@@ -8,12 +8,12 @@
 
     public class AccessTokenClientTests
     {
-        private const string ClientId = "demo-identifier";
-        private const string ClientSecret = "demo-secret";
-        private const string Username = "demo-username";
-        private const string Password = "demo-password";
-        private const string ClientScope = "demo-scope-client";
-        private const string UserScope = "demo-scope-user";
+        private const string ClientId = "demo-client-1";
+        private const string ClientSecret = "demo-client-secret-1";
+        private const string ClientScope = "demo-scope-client-1";
+        private const string Username = "demo-user-1";
+        private const string Password = "demo-user-password-1";
+        private const string UserScope = "demo-scope-1";
 
         private static readonly Uri TokensUrl = new Uri("/tokens", UriKind.Relative);
         private static readonly Uri BaseUrl = new Uri("https://oauth2demo.azurewebsites.net");
