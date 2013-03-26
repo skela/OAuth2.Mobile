@@ -1,6 +1,7 @@
 ﻿namespace StudioDonder.OAuth2.Mobile.Tests.Helpers
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using Xamarin.Auth;
 
@@ -28,6 +29,13 @@
             if (!this.servicesWithAccounts.ContainsKey(serviceId))
             {
                 this.servicesWithAccounts[serviceId] = new List<Account>();
+            }
+
+            var existingAccount = this.servicesWithAccounts[serviceId].FirstOrDefault(a => a.Username == account.Username);
+
+            if (existingAccount != null)
+            {
+                this.servicesWithAccounts[serviceId].Remove(existingAccount);
             }
 
             this.servicesWithAccounts[serviceId].Add(account);

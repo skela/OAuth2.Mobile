@@ -288,6 +288,28 @@
         }
 
         [Fact]
+        public void SaveUserAccessTokenOverwritesExistingAccessToken()
+        {
+            // Arrange
+            var accessTokenStore = CreateAccessTokenStore();
+            var accessToken = CreateAccessToken();
+
+            // Act
+            var task = accessTokenStore.SaveUserAccessToken(Username, ServiceId, accessToken, CancellationToken.None);
+            task.Wait();
+
+            var accessToken2 = CreateDifferentAccessToken();
+            var task2 = accessTokenStore.SaveUserAccessToken(Username, ServiceId, accessToken2, CancellationToken.None);
+            task2.Wait();
+
+            var task3 = accessTokenStore.GetUserAccessToken(Username, ServiceId, CancellationToken.None);
+            task3.Wait();
+
+            // Assert
+            Assert.Equal(accessToken2, task3.Result, new AccessTokenEqualityComparer());
+        }
+
+        [Fact]
         public void SaveClientAccessTokenWithNullClientIdThrowsArgumentNullException()
         {
             // Arrange
@@ -368,6 +390,28 @@
 
             // Assert
             Assert.Equal(accessToken, getUserAccessTokenTask.Result, new AccessTokenEqualityComparer());
+        }
+
+        [Fact]
+        public void SaveClientAccessTokenOverwritesExistingAccessToken()
+        {
+            // Arrange
+            var accessTokenStore = CreateAccessTokenStore();
+            var accessToken = CreateAccessToken();
+            var differentAccessToken = CreateDifferentAccessToken();
+
+            // Act
+            var task = accessTokenStore.SaveClientAccessToken(ClientId, ServiceId, accessToken, CancellationToken.None);
+            task.Wait();
+
+            var task2 = accessTokenStore.SaveClientAccessToken(ClientId, ServiceId, differentAccessToken, CancellationToken.None);
+            task2.Wait();
+
+            var task3 = accessTokenStore.GetClientAccessToken(ClientId, ServiceId, CancellationToken.None);
+            task3.Wait();
+
+            // Assert
+            Assert.Equal(differentAccessToken, task3.Result, new AccessTokenEqualityComparer());
         }
 
         [Fact]
