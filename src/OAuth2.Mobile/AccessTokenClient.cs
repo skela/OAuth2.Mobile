@@ -1,6 +1,8 @@
 ﻿namespace StudioDonder.OAuth2.Mobile
 {
+    using System;
     using System.Net;
+    using System.Runtime.Serialization;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Web;
@@ -30,7 +32,7 @@
             Requires.NotNull(serverConfiguration, "clientConfiguration");
 
             this.serverConfiguration = serverConfiguration;
-            this.jsonDeserializer = new JsonDeserializer();
+            this.jsonDeserializer = new JsonDeserializer();            
             this.RestClient = new RestClient(serverConfiguration.BaseUrl.ToString());
         }
 
@@ -85,24 +87,26 @@
         private Task<AccessToken> ExecuteAccessTokenRequest(TokenRequest tokenRequest, CancellationToken cancellationToken)
         {
             var restRequest = tokenRequest.ToRestRequest(this.serverConfiguration.TokensUrl);
-            restRequest.OnBeforeDeserialization += response =>
-                {
-                    if ((int)response.StatusCode >= 400)
+
+            return this.RestClient.ExecuteAsync(restRequest, cancellationToken)
+                .ContinueWith(t =>
                     {
-                        return;
-                    }
+                        try
+                        {
+                            if (t.Result.StatusCode >= HttpStatusCode.BadRequest)
+                            {
+                                throw new HttpException((int)t.Result.StatusCode, t.Result.StatusDescription);
+                            }
 
-                    var accessTokenErrorResponse = this.jsonDeserializer.Deserialize<AccessTokenErrorResponse>(response);
+                            return this.jsonDeserializer.Deserialize<AccessTokenResponse>(t.Result).ToAccessToken();
+                        }
+                        catch (SerializationException)
+                        {
+                            var accessTokenErrorResponse = this.jsonDeserializer.Deserialize<AccessTokenErrorResponse>(t.Result);
 
-                    if (accessTokenErrorResponse.IsEmpty)
-                    {
-                        return;
-                    }
-
-                    throw new HttpException((int)HttpStatusCode.BadRequest, accessTokenErrorResponse.error_description);
-                };
-
-            return this.RestClient.ExecuteAsync<AccessTokenResponse>(restRequest, cancellationToken).ContinueWith(t => t.Result.ToAccessToken(), TaskContinuationOptions.OnlyOnRanToCompletion);
+                            throw new OAuthException(accessTokenErrorResponse.error_description);
+                        }
+                    });
         }
     }
 }

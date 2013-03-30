@@ -1,7 +1,6 @@
 ﻿namespace StudioDonder.OAuth2.Mobile.Tests
 {
     using System;
-    using System.Net;
     using System.Threading;
 
     using Xunit;
@@ -17,11 +16,6 @@
 
         private static readonly Uri TokensUrl = new Uri("/tokens", UriKind.Relative);
         private static readonly Uri BaseUrl = new Uri("https://oauth2demo.azurewebsites.net");
-
-        public AccessTokenClientTests()
-        {
-            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-        }
 
         private static OAuthServerConfiguration ServerConfiguration
         {

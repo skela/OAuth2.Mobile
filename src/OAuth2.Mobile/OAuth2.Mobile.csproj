@@ -49,6 +49,7 @@
     <Compile Include="AccessToken.cs" />
     <Compile Include="AccessTokenErrorResponse.cs" />
     <Compile Include="AccessTokenResponse.cs" />
+    <Compile Include="OAuthException.cs" />
     <Compile Include="OAuthServerConfiguration.cs" />
     <Compile Include="Requests\ClientCredentialsGrantTokenRequest.cs" />
     <Compile Include="Requests\TokenRequest.cs" />

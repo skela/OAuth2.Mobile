@@ -9,7 +9,7 @@
         /// Gets or sets the error.
         /// </summary>
         /// <value>
-        /// The errorn.
+        /// The error.
         /// </value>
         public string error { get; set; }
 
@@ -20,19 +20,5 @@
         /// The error description.
         /// </value>
         public string error_description { get; set; }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is empty.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is empty; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsEmpty
-        {
-            get
-            {
-                return string.IsNullOrWhiteSpace(this.error) && string.IsNullOrWhiteSpace(this.error_description);
-            }
-        }
     }
 }
