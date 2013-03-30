@@ -61,6 +61,7 @@
     <Compile Include="Requests\ResourceOwnerPasswordCredentialsGrantTokenRequestTests.cs" />
     <Compile Include="Requests\TokenRequestTests.cs" />
     <Compile Include="AccessTokenResponseTests.cs" />
+    <Compile Include="RestClientExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
