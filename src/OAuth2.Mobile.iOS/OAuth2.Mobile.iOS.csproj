@@ -46,21 +46,18 @@
     <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\OAuth2.Mobile\AccessToken.cs" />
-    <Compile Include="..\OAuth2.Mobile\AccessTokenErrorResponse.cs">
-      <Link>AccessTokenErrorResponse.cs</Link>
-    </Compile>
-    <Compile Include="..\OAuth2.Mobile\AccessTokenResponse.cs">
-      <Link>AccessTokenResponse.cs</Link>
-    </Compile>
-    <Compile Include="..\OAuth2.Mobile\OAuthServerConfiguration.cs" />
-    <Compile Include="..\OAuth2.Mobile\Requests\ClientCredentialsGrantTokenRequest.cs" />
-    <Compile Include="..\OAuth2.Mobile\Requests\TokenRequest.cs" />
-    <Compile Include="..\OAuth2.Mobile\Requests\ResourceOwnerPasswordCredentialsGrantTokenRequest.cs" />
-    <Compile Include="..\OAuth2.Mobile\Requests\RefreshAccessTokenRequest.cs" />
-    <Compile Include="..\OAuth2.Mobile\RestClientExtensions.cs" />
-    <Compile Include="..\OAuth2.Mobile\AccessTokenClient.cs" />
-    <Compile Include="..\OAuth2.Mobile\AccessTokenStore.cs" />
+    <Compile Include="..\OAuth2.Mobile\AccessToken.cs"><Link>AccessToken.cs</Link></Compile>
+	<Compile Include="..\OAuth2.Mobile\AccessTokenErrorResponse.cs"><Link>AccessTokenErrorResponse.cs</Link></Compile>
+	<Compile Include="..\OAuth2.Mobile\AccessTokenResponse.cs"><Link>AccessTokenResponse.cs</Link></Compile>
+	<Compile Include="..\OAuth2.Mobile\OAuthException.cs"><Link>OAuthException.cs</Link></Compile>
+	<Compile Include="..\OAuth2.Mobile\OAuthServerConfiguration.cs"><Link>OAuthServerConfiguration.cs</Link></Compile>
+	<Compile Include="..\OAuth2.Mobile\Requests\ClientCredentialsGrantTokenRequest.cs"><Link>Requests\ClientCredentialsGrantTokenRequest.cs</Link></Compile>
+	<Compile Include="..\OAuth2.Mobile\Requests\TokenRequest.cs"><Link>Requests\TokenRequest.cs</Link></Compile>
+	<Compile Include="..\OAuth2.Mobile\Requests\ResourceOwnerPasswordCredentialsGrantTokenRequest.cs"><Link>Requests\ResourceOwnerPasswordCredentialsGrantTokenRequest.cs</Link></Compile>
+	<Compile Include="..\OAuth2.Mobile\Requests\RefreshAccessTokenRequest.cs"><Link>Requests\RefreshAccessTokenRequest.cs</Link></Compile>
+	<Compile Include="..\OAuth2.Mobile\RestClientExtensions.cs"><Link>RestClientExtensions.cs</Link></Compile>
+	<Compile Include="..\OAuth2.Mobile\AccessTokenClient.cs"><Link>AccessTokenClient.cs</Link></Compile>
+	<Compile Include="..\OAuth2.Mobile\AccessTokenStore.cs"><Link>AccessTokenStore.cs</Link></Compile>
     <Compile Include="HttpException.cs" />
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
