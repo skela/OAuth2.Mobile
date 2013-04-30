@@ -1,8 +1,6 @@
 ﻿namespace StudioDonder.OAuth2.Mobile
 {
-    using System;
     using System.Net;
-    using System.Runtime.Serialization;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Web;
@@ -31,8 +29,8 @@
         {
             Requires.NotNull(serverConfiguration, "clientConfiguration");
 
+            this.jsonDeserializer = new JsonDeserializer();
             this.serverConfiguration = serverConfiguration;
-            this.jsonDeserializer = new JsonDeserializer();            
             this.RestClient = new RestClient(serverConfiguration.BaseUrl.ToString());
         }
 
@@ -91,21 +89,14 @@
             return this.RestClient.ExecuteAsync(restRequest, cancellationToken)
                 .ContinueWith(t =>
                     {
-                        try
+                        // We will only process HTTP 200 status codes, as only then we can be sure 
+                        // that we have received a correct response
+                        if (t.Result.StatusCode == HttpStatusCode.OK)
                         {
-                            if (t.Result.StatusCode >= HttpStatusCode.BadRequest)
-                            {
-                                throw new HttpException((int)t.Result.StatusCode, t.Result.StatusDescription);
-                            }
-
                             return this.jsonDeserializer.Deserialize<AccessTokenResponse>(t.Result).ToAccessToken();
                         }
-                        catch (SerializationException)
-                        {
-                            var accessTokenErrorResponse = this.jsonDeserializer.Deserialize<AccessTokenErrorResponse>(t.Result);
 
-                            throw new OAuthException(accessTokenErrorResponse.error_description);
-                        }
+                        throw new HttpException((int)t.Result.StatusCode, t.Result.StatusDescription);
                     });
         }
     }

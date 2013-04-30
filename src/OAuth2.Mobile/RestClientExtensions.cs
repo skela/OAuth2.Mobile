@@ -14,55 +14,6 @@
     public static class RestClientExtensions
     {
         /// <summary>
-        /// Executes a request asynchronously and convert the response to a specific type.
-        /// </summary>
-        /// <typeparam name="T">The type to convert the response to.</typeparam>
-        /// <param name="client">The client.</param>
-        /// <param name="request">The request.</param>
-        /// <param name="token">The token.</param>
-        /// <returns>
-        /// The asynchronous request task.
-        /// </returns>
-        public static Task<T> ExecuteAsync<T>(this IRestClient client, IRestRequest request, CancellationToken token)
-        {
-            Requires.NotNull(client, "client");
-            Requires.NotNull(request, "request");
-            
-            var taskCompletionSource = new TaskCompletionSource<T>();
-
-            try
-            {
-                var async = client.ExecuteAsync<T>(request, (response, _) =>
-                    {
-                        if (token.IsCancellationRequested)
-                        {
-                            taskCompletionSource.TrySetCanceled();
-                        }
-                        else if (response.ErrorException != null)
-                        {
-                            taskCompletionSource.TrySetException(response.ErrorException);
-                        }
-                        else
-                        {
-                            taskCompletionSource.TrySetResult(response.Data);
-                        }
-                    });
-
-                token.Register(() =>
-                    {
-                        async.Abort();
-                        taskCompletionSource.TrySetCanceled();
-                    });
-            }
-            catch (Exception ex)
-            {
-                taskCompletionSource.TrySetException(ex);
-            }
-
-            return taskCompletionSource.Task;
-        }
-
-        /// <summary>
         /// Executes a request asynchronously.
         /// </summary>
         /// <param name="client">The client.</param>
@@ -87,6 +38,10 @@
                         else if (response.ErrorException != null)
                         {
                             taskCompletionSource.TrySetException(response.ErrorException);
+                        }
+                        else if (response.ResponseStatus != ResponseStatus.Completed)
+                        {
+                            taskCompletionSource.TrySetException(response.ResponseStatus.ToHttpException());
                         }
                         else
                         {

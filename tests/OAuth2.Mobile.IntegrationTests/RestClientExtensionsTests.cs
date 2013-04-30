@@ -9,6 +9,8 @@
 
     public class RestClientExtensionsTests
     {
+        private const int InsanelyShortTimeout = 2;
+
         [Fact]
         public void ExecuteAsyncOnSuccessfulRequestReturnsRestResponseWithContentSet()
         {
@@ -53,32 +55,18 @@
         }
 
         [Fact]
-        public void ExecuteAsyncGenericOnSuccessfulRequestReturnsCorrectlyDeserializedResponse()
+        public void ExecuteAsyncThrowsExceptionWhenTimeoutOccurs()
         {
             // Arrange
             var restClient = CreateRestClient();
+            restClient.Timeout = InsanelyShortTimeout;
 
             // Act
-            var executeAsyncTask = restClient.ExecuteAsync<JsonData>(CreateRestRequest(), CancellationToken.None);
-            executeAsyncTask.Wait();
-
+            var executeAsyncTask = restClient.ExecuteAsync(CreateRestRequest(), CancellationToken.None);
+            executeAsyncTask.ContinueWith(t => t.Result);
+ 
             // Assert
-            Assert.Equal("value", executeAsyncTask.Result.Key);
-        }
-
-        [Fact]
-        public void ExecuteAsyncGenericCorrectlyHandlesCancellation()
-        {
-            // Arrange
-            var restClient = CreateRestClient();
-            var cancellationTokenSource = new CancellationTokenSource();
-
-            // Act
-            var executeAsyncTask = restClient.ExecuteAsync<JsonData>(CreateRestRequest(), cancellationTokenSource.Token);
-            cancellationTokenSource.Cancel();
-
-            // Assert
-            Assert.True(executeAsyncTask.IsCanceled);
+            Assert.Throws<AggregateException>(() => executeAsyncTask.Result);
         }
 
         private static RestClient CreateInvalidRestClient()
@@ -94,11 +82,6 @@
         private static RestRequest CreateRestRequest()
         {
             return new RestRequest(new Uri("/", UriKind.Relative));
-        }
-
-        private class JsonData
-        {
-            public string Key { get; set; }
         }
     }
 }
