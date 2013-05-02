@@ -13,7 +13,7 @@
     using Validation;
 
     /// <summary>
-    /// This client allows retrieval of access tokens.
+    /// This client allows retrieval of access tokens through the OAuth 2 protocol (http://tools.ietf.org/html/rfc6749).
     /// </summary>
     public class AccessTokenClient
     {
@@ -43,6 +43,48 @@
         public RestClient RestClient { get; private set; }
 
         /// <summary>
+        /// Gets an access token for a client.
+        /// </summary>
+        /// <param name="scope">The scope.</param>
+        /// <returns>The access token retrieval task.</returns>
+        /// <remarks>
+        /// This method implements the client credentials grant workflow (http://tools.ietf.org/html/rfc6749#section-4.4)
+        /// </remarks>
+        public Task<AccessToken> GetClientAccessToken(string scope)
+        {
+            return this.GetClientAccessToken(scope, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Gets an access token for a client.
+        /// </summary>
+        /// <param name="scope">The scope.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The access token retrieval task.</returns>
+        /// <remarks>
+        /// This method implements the client credentials grant workflow (http://tools.ietf.org/html/rfc6749#section-4.4)
+        /// </remarks>
+        public Task<AccessToken> GetClientAccessToken(string scope, CancellationToken cancellationToken)
+        {
+            return this.ExecuteAccessTokenRequest(new ClientCredentialsGrantTokenRequest(this.serverConfiguration.ClientId, this.serverConfiguration.ClientSecret, scope), cancellationToken);
+        }
+
+        /// <summary>
+        /// Gets an access token for a user.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="scope">The scope.</param>
+        /// <returns>The access token retrieval task.</returns>
+        /// <remarks>
+        /// This method implements the resource owner password credentials grant workflow (http://tools.ietf.org/html/rfc6749#section-4.3)
+        /// </remarks>
+        public Task<AccessToken> GetUserAccessToken(string username, string password, string scope)
+        {
+            return this.GetUserAccessToken(username, password, scope, CancellationToken.None);
+        }
+
+        /// <summary>
         /// Gets an access token for a user.
         /// </summary>
         /// <param name="username">The username.</param>
@@ -50,6 +92,9 @@
         /// <param name="scope">The scope.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The access token retrieval task.</returns>
+        /// <remarks>
+        /// This method implements the resource owner password credentials grant workflow (http://tools.ietf.org/html/rfc6749#section-4.3)
+        /// </remarks>
         public Task<AccessToken> GetUserAccessToken(string username, string password, string scope, CancellationToken cancellationToken)
         {
             Requires.NotNullOrEmpty(username, "username");
@@ -59,14 +104,16 @@
         }
 
         /// <summary>
-        /// Gets an access token for a client.
+        /// Exchanged a refresh token for a new access token.
         /// </summary>
-        /// <param name="scope">The scope.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The access token retrieval task.</returns>
-        public Task<AccessToken> GetClientAccessToken(string scope, CancellationToken cancellationToken)
+        /// <param name="refreshToken">The refresh token.</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// This method implements the refresh access token workflow (http://tools.ietf.org/html/rfc6749#section-6)
+        /// </remarks>
+        public Task<AccessToken> RefreshToken(string refreshToken)
         {
-            return this.ExecuteAccessTokenRequest(new ClientCredentialsGrantTokenRequest(this.serverConfiguration.ClientId, this.serverConfiguration.ClientSecret, scope), cancellationToken);
+            return this.RefreshToken(refreshToken, CancellationToken.None);
         }
 
         /// <summary>
@@ -75,6 +122,9 @@
         /// <param name="refreshToken">The refresh token.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
+        /// <remarks>
+        /// This method implements the refresh access token workflow (http://tools.ietf.org/html/rfc6749#section-6)
+        /// </remarks>
         public Task<AccessToken> RefreshToken(string refreshToken, CancellationToken cancellationToken)
         {
             Requires.NotNullOrEmpty(refreshToken, "refreshToken");
@@ -90,7 +140,8 @@
                 .ContinueWith(t =>
                     {
                         // We will only process HTTP 200 status codes, as only then we can be sure 
-                        // that we have received a correct response
+                        // that we have received a correct response and can be try to deserialize
+                        // the access token response
                         if (t.Result.StatusCode == HttpStatusCode.OK)
                         {
                             return this.jsonDeserializer.Deserialize<AccessTokenResponse>(t.Result).ToAccessToken();

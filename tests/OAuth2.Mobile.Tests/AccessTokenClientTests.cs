@@ -15,14 +15,7 @@
 
         private static readonly Uri TokensUrl = new Uri("/tokens", UriKind.Relative);
         private static readonly Uri BaseUrl = new Uri("https://oauth2demo.azurewebsites.net");
-
-        private static OAuthServerConfiguration ServerConfiguration
-        {
-            get
-            {
-                return new OAuthServerConfiguration(BaseUrl, TokensUrl, ClientId, ClientSecret);
-            }
-        }
+        private static readonly OAuthServerConfiguration ServerConfiguration = new OAuthServerConfiguration(BaseUrl, TokensUrl, ClientId, ClientSecret);
 
         [Fact]
         public void ConstructorCreatesRestClient()
@@ -56,6 +49,19 @@
             string nullUsername = null;
 
             // Act
+
+            // Assert
+            Assert.Throws<ArgumentNullException>(() => accessTokenClient.GetUserAccessToken(nullUsername, Password, UserScope));
+        }
+
+        [Fact]
+        public void GetUserAccessTokenCancellationTokenOverloadWithNullUsernameThrowsArgumentNullException()
+        {
+            // Arrange
+            var accessTokenClient = new AccessTokenClient(ServerConfiguration);
+            string nullUsername = null;
+
+            // Act
             
             // Assert
             Assert.Throws<ArgumentNullException>(() => accessTokenClient.GetUserAccessToken(nullUsername, Password, UserScope, CancellationToken.None));
@@ -63,6 +69,19 @@
 
         [Fact]
         public void GetUserAccessTokenWithEmptyUsernameThrowsArgumentException()
+        {
+            // Arrange
+            var accessTokenClient = new AccessTokenClient(ServerConfiguration);
+            var emptyUsername = string.Empty;
+
+            // Act
+
+            // Assert
+            Assert.Throws<ArgumentException>(() => accessTokenClient.GetUserAccessToken(emptyUsername, Password, UserScope));
+        }
+
+        [Fact]
+        public void GetUserAccessTokenCancellationTokenOverloadWithEmptyUsernameThrowsArgumentException()
         {
             // Arrange
             var accessTokenClient = new AccessTokenClient(ServerConfiguration);
@@ -84,11 +103,37 @@
             // Act
 
             // Assert
+            Assert.Throws<ArgumentNullException>(() => accessTokenClient.GetUserAccessToken(Username, nullPassword, UserScope));
+        }
+
+        [Fact]
+        public void GetUserAccessTokenCancellationTokenOverloadWithNullPasswordThrowsArgumentNullException()
+        {
+            // Arrange
+            var accessTokenClient = new AccessTokenClient(ServerConfiguration);
+            string nullPassword = null;
+
+            // Act
+
+            // Assert
             Assert.Throws<ArgumentNullException>(() => accessTokenClient.GetUserAccessToken(Username, nullPassword, UserScope, CancellationToken.None));
         }
 
         [Fact]
         public void GetUserAccessTokenWithEmptyPasswordThrowsArgumentException()
+        {
+            // Arrange
+            var accessTokenClient = new AccessTokenClient(ServerConfiguration);
+            var emptyPassword = string.Empty;
+
+            // Act
+
+            // Assert
+            Assert.Throws<ArgumentException>(() => accessTokenClient.GetUserAccessToken(Username, emptyPassword, UserScope));
+        }
+
+        [Fact]
+        public void GetUserAccessTokenCancellationTokenOverloadWithEmptyPasswordThrowsArgumentException()
         {
             // Arrange
             var accessTokenClient = new AccessTokenClient(ServerConfiguration);
@@ -110,11 +155,37 @@
             // Act
 
             // Assert
+            Assert.Throws<ArgumentNullException>(() => accessTokenClient.RefreshToken(nullRefreshToken));
+        }
+
+        [Fact]
+        public void RefreshTokenCancellationTokenOverloadWithNullRefreshTokenThrowsArgumentNullException()
+        {
+            // Arrange
+            var accessTokenClient = new AccessTokenClient(ServerConfiguration);
+            string nullRefreshToken = null;
+
+            // Act
+
+            // Assert
             Assert.Throws<ArgumentNullException>(() => accessTokenClient.RefreshToken(nullRefreshToken, CancellationToken.None));
         }
 
         [Fact]
         public void RefreshTokenWithEmptyRefreshTokenThrowsArgumentException()
+        {
+            // Arrange
+            var accessTokenClient = new AccessTokenClient(ServerConfiguration);
+            var emptyRefreshToken = string.Empty;
+
+            // Act
+
+            // Assert
+            Assert.Throws<ArgumentException>(() => accessTokenClient.RefreshToken(emptyRefreshToken));
+        }
+
+        [Fact]
+        public void RefreshTokenCancellationTokenOverloadWithEmptyRefreshTokenThrowsArgumentException()
         {
             // Arrange
             var accessTokenClient = new AccessTokenClient(ServerConfiguration);

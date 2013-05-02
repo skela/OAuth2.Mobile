@@ -16,14 +16,7 @@
 
         private static readonly Uri TokensUrl = new Uri("/tokens", UriKind.Relative);
         private static readonly Uri BaseUrl = new Uri("https://oauth2demo.azurewebsites.net");
-
-        private static OAuthServerConfiguration ServerConfiguration
-        {
-            get
-            {
-                return new OAuthServerConfiguration(BaseUrl, TokensUrl, ClientId, ClientSecret);
-            }
-        }
+        private static readonly OAuthServerConfiguration ServerConfiguration = new OAuthServerConfiguration(BaseUrl, TokensUrl, ClientId, ClientSecret);
         
         [Fact]
         public void GetUserAccessTokenWithValidCredentialsReturnsAccessToken()
@@ -31,6 +24,20 @@
             // Arrange
             var accessTokenClient = new AccessTokenClient(ServerConfiguration);
             
+            // Act
+            var task = accessTokenClient.GetUserAccessToken(Username, Password, UserScope);
+            task.Wait();
+
+            // Assert
+            Assert.NotNull(task.Result);
+        }
+
+        [Fact]
+        public void GetUserAccessTokenCancellationTokenOverloadWithValidCredentialsReturnsAccessToken()
+        {
+            // Arrange
+            var accessTokenClient = new AccessTokenClient(ServerConfiguration);
+
             // Act
             var task = accessTokenClient.GetUserAccessToken(Username, Password, UserScope, CancellationToken.None);
             task.Wait();
@@ -46,14 +53,40 @@
             var accessTokenClient = new AccessTokenClient(ServerConfiguration);
 
             // Act
-            var task = accessTokenClient.GetUserAccessToken(Username, Password, "invalid user scope", CancellationToken.None);
+            var task = accessTokenClient.GetUserAccessToken(Username, Password, "invalid user scope");
             
             // Assert
             Assert.Throws<AggregateException>(() => task.Wait());
         }
 
         [Fact]
+        public void GetUserAccessTokenCancellationTokenOverloadWithValidCredentialsButInvalidScopeThrowsException()
+        {
+            // Arrange
+            var accessTokenClient = new AccessTokenClient(ServerConfiguration);
+
+            // Act
+            var task = accessTokenClient.GetUserAccessToken(Username, Password, "invalid user scope", CancellationToken.None);
+
+            // Assert
+            Assert.Throws<AggregateException>(() => task.Wait());
+        }
+
+        [Fact]
         public void GetUserAccessTokenWithNullScopeDoesNotThrowException()
+        {
+            // Arrange
+            var accessTokenClient = new AccessTokenClient(ServerConfiguration);
+            string nullScope = null;
+
+            // Act
+
+            // Assert
+            Assert.DoesNotThrow(() => accessTokenClient.GetUserAccessToken(Username, Password, nullScope));
+        }
+
+        [Fact]
+        public void GetUserAccessTokenCancellationTokenOverloadWithNullScopeDoesNotThrowException()
         {
             // Arrange
             var accessTokenClient = new AccessTokenClient(ServerConfiguration);
@@ -72,6 +105,20 @@
             var accessTokenClient = new AccessTokenClient(ServerConfiguration);
 
             // Act
+            var task = accessTokenClient.GetClientAccessToken(ClientScope);
+            task.Wait();
+
+            // Assert
+            Assert.NotNull(task.Result);
+        }
+
+        [Fact]
+        public void GetClientAccessTokenCancellationTokenOverloadReturnsAccessToken()
+        {
+            // Arrange
+            var accessTokenClient = new AccessTokenClient(ServerConfiguration);
+
+            // Act
             var task = accessTokenClient.GetClientAccessToken(ClientScope, CancellationToken.None);
             task.Wait();
 
@@ -81,6 +128,19 @@
 
         [Fact]
         public void GetClientAccessTokenWithInvalidScopeReturnsAccessToken()
+        {
+            // Arrange
+            var accessTokenClient = new AccessTokenClient(ServerConfiguration);
+
+            // Act
+            var task = accessTokenClient.GetClientAccessToken("invalid client scope");
+
+            // Assert
+            Assert.Throws<AggregateException>(() => task.Wait());
+        }
+
+        [Fact]
+        public void GetClientAccessTokenCancellationTokenOverloadWithInvalidScopeReturnsAccessToken()
         {
             // Arrange
             var accessTokenClient = new AccessTokenClient(ServerConfiguration);
@@ -102,11 +162,41 @@
             // Act
 
             // Assert
+            Assert.DoesNotThrow(() => accessTokenClient.GetClientAccessToken(nullScope));
+        }
+
+        [Fact]
+        public void GetClientAccessTokenCancellationTokenOverloadWithNullScopeDoesNotThrowException()
+        {
+            // Arrange
+            var accessTokenClient = new AccessTokenClient(ServerConfiguration);
+            string nullScope = null;
+
+            // Act
+
+            // Assert
             Assert.DoesNotThrow(() => accessTokenClient.GetClientAccessToken(nullScope, CancellationToken.None));
         }
 
         [Fact]
         public void RefreshTokenReturnsNewAccessToken()
+        {
+            // Arrange
+            var accessTokenClient = new AccessTokenClient(ServerConfiguration);
+
+            // Act
+            var task = accessTokenClient.GetUserAccessToken(Username, Password, UserScope);
+            task.Wait();
+
+            var refreshTokenTask = accessTokenClient.RefreshToken(task.Result.RefreshToken);
+            refreshTokenTask.Wait();
+
+            // Assert
+            Assert.NotNull(refreshTokenTask.Result);
+        }
+
+        [Fact]
+        public void RefreshTokenCancellationTokenOverloadReturnsNewAccessToken()
         {
             // Arrange
             var accessTokenClient = new AccessTokenClient(ServerConfiguration);
